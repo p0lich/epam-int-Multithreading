@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPAM.Multithreading.TaskArray", "EPAM.Multithreading.TaskArray\EPAM.Multithreading.TaskArray.csproj", "{C9AF7AF4-9649-441E-A3B0-61CC1C5FCDE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAM.Multithreading.TaskArray", "EPAM.Multithreading.TaskArray\EPAM.Multithreading.TaskArray.csproj", "{C9AF7AF4-9649-441E-A3B0-61CC1C5FCDE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPAM.Multithreading.TasksChain", "EPAM.Multithreading.TasksChain\EPAM.Multithreading.TasksChain.csproj", "{2AF371D6-4E84-42F0-921B-99574D721E69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAM.Multithreading.TasksChain", "EPAM.Multithreading.TasksChain\EPAM.Multithreading.TasksChain.csproj", "{2AF371D6-4E84-42F0-921B-99574D721E69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPAM.Multithreading.ParallelMultiply", "EPAM.Multithreading.ParallelMultiply\EPAM.Multithreading.ParallelMultiply.csproj", "{B6A3A95D-B824-49A8-B3CF-02349CA5FC36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAM.Multithreading.ParallelMultiply", "EPAM.Multithreading.ParallelMultiply\EPAM.Multithreading.ParallelMultiply.csproj", "{B6A3A95D-B824-49A8-B3CF-02349CA5FC36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPAM.SumCalculation", "EPAM.SumCalculation\EPAM.SumCalculation.csproj", "{D8245B13-7B69-472D-B744-E31497892AAD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{B6A3A95D-B824-49A8-B3CF-02349CA5FC36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6A3A95D-B824-49A8-B3CF-02349CA5FC36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6A3A95D-B824-49A8-B3CF-02349CA5FC36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8245B13-7B69-472D-B744-E31497892AAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8245B13-7B69-472D-B744-E31497892AAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8245B13-7B69-472D-B744-E31497892AAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8245B13-7B69-472D-B744-E31497892AAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
