@@ -10,7 +10,8 @@ namespace EPAM.SumCalculation
 
         static async Task Main(string[] args)
         {
-            int result = await CalculateAsync();
+            int inputNumber = InputNumber();
+            int result = await CalculateAsync(inputNumber);
             Console.WriteLine(result);
         }
 
@@ -25,6 +26,7 @@ namespace EPAM.SumCalculation
                     Thread.Sleep(1000);
                     Console.WriteLine($"Current step: {i}");
                     sum += i;
+                    
                     cancellationToken.ThrowIfCancellationRequested();
                 }
             });
@@ -34,10 +36,11 @@ namespace EPAM.SumCalculation
 
         private static int InputNumber()
         {
-            if (!int.TryParse(Console.ReadLine(), out int inputNumber))
+            int inputNumber = 0;
+
+            while (!int.TryParse(Console.ReadLine(), out inputNumber))
             {
                 Console.WriteLine("Wrong input, try again");
-                InputNumber();
             }
 
             return inputNumber;
@@ -49,32 +52,28 @@ namespace EPAM.SumCalculation
 
             await Task.Factory.StartNew(() =>
             {
-                if (!int.TryParse(Console.ReadLine(), out inputNumber))
+                while (!int.TryParse(Console.ReadLine(), out inputNumber))
                 {
-                    throw new InvalidCastException("Wrong input format, try again");
+                    Console.WriteLine("Wrong input. Try again");
                 }
-                s_cts.Cancel();
             });
 
+            s_cts.Cancel();
             return inputNumber;
         }
 
-        private static async Task<int> CalculateAsync()
+        private static async Task<int> CalculateAsync(int inputNumber)
         {
-            int inputNumber = InputNumber();
             Task<int> newNumberTask = InputNumberAsync();
-            int sum = 0;
 
             try
-            {
-                sum = 0;
-                
+            {              
                 Task<int> sumTask = GetSum(inputNumber, s_cts.Token);
                 Task<int>[] tasks = new Task<int>[] { sumTask, newNumberTask };
 
                 await Task.WhenAny(tasks);
 
-                sum = sumTask.Result;
+                int sum = sumTask.Result;
 
                 return sum;
             }
@@ -83,23 +82,14 @@ namespace EPAM.SumCalculation
             {
                 Console.WriteLine("Calculation was canceled");
 
-                s_cts = new CancellationTokenSource();
-
-                if (newNumberTask.Result > 0)
+                if (newNumberTask.Result <= 0)
                 {
-                    inputNumber = newNumberTask.Result;
+                    return 0;
                 }
 
-                Task<int> sumTask = GetSum(inputNumber, s_cts.Token);
-                newNumberTask = InputNumberAsync();
+                s_cts = new CancellationTokenSource();
 
-                Task<int>[] tasks = new Task<int>[] { sumTask, newNumberTask };
-
-                await Task.WhenAny(tasks);
-
-                sum = sumTask.Result;
-
-                return sum;
+                return CalculateAsync(newNumberTask.Result).Result;
             }
         }
     }
