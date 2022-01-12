@@ -11,108 +11,71 @@ namespace EPAM.Multithreading.TasksChain
 
         static async Task Main(string[] args)
         {
-            int[] array = new int[10];
-
-            var chainTask = Task.Run(() => 
+            Task<int[]> arrayCreateTask = new Task<int[]>(() =>
             {
-                for (int i = 0; i < array.Length; i++)
-                {
-                    array[i] = _random.Next(0, 100);
-                    Console.Write(array[i] + " ");
-                }
-
-                Console.WriteLine();
+                int[] array = ArrayCreate(10);
+                ArrayPrint(array);
+                return array;
             });
 
-            await chainTask.ContinueWith(_ => 
+            Task<int[]> arrayMultiplyTask = arrayCreateTask.ContinueWith(arr =>
             {
-                for (int i = 0; i < array.Length; i++)
-                {
-                    array[i] *= _random.Next(1, 11);
-                    Console.Write(array[i] + " ");
-                }
+                int[] array = ArrayMultiply(arr.Result);
+                ArrayPrint(array);
+                return array;
+            });
 
-                Console.WriteLine();
-            }, TaskContinuationOptions.OnlyOnRanToCompletion);
-
-            await chainTask.ContinueWith(_ =>
+            Task<int[]> arraySortTask = arrayMultiplyTask.ContinueWith(arr =>
             {
-                Array.Sort(array);
-                for (int i = 0; i < array.Length; i++)
-                {
-                    Console.Write(array[i] + " ");
-                }
-                
-                Console.WriteLine();
-            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                int[] array = ArraySort(arr.Result);
+                ArrayPrint(array);
+                return array;
+            });
 
-            await chainTask.ContinueWith(_ =>
+            Task<int> getAverageTask = arraySortTask.ContinueWith(arr =>
             {
-                int average = 0;
-                for (int i = 0;i < array.Length; i++)
-                {
-                    average += array[i];
-                }
-
-                average /= array.Length;
+                int average = GetAverage(arr.Result);
                 Console.WriteLine(average);
-            }, TaskContinuationOptions.OnlyOnRanToCompletion);
-
-            //Task<int[]> createArray = ArrayInitialize(array);
-            //Task<int[]> multiplyArray = MulitplyArray(array, 5);
-            //Task<int[]> sortArray = SortArray(array);
-
-            //Task<int> getAverage = GetAverage(array);
-
-            //Task<int[]>[] tasks = new Task<int[]>[] { createArray, multiplyArray, sortArray };
-
-            //Task[] processingTasks = tasks.Select(async t =>
-            //{
-            //    var result = await t;
-            //    ArrayPrint(t.Result);
-            //}).ToArray();
-
-            //var result = await Task.WhenAll(tasks);
-
-            //for (int i = 0; i < result.Length; i++)
-            //{
-            //    ArrayPrint(result[i]);
-            //}
-        }
-
-        private static async Task<int[]> ArrayInitialize(int[] array)
-        {
-            await Task.Factory.StartNew(() => {
-                for (int i = 0; i < array.Length; i++)
-                {
-                    array[i] = _random.Next(0, 100);
-                }
+                return average;
             });
 
-            return array;
+            arrayCreateTask.Start();
+            await arrayCreateTask;
+            await arrayMultiplyTask;
+            await arraySortTask;
+            await getAverageTask;
         }
 
-        private static async Task<int[]> MulitplyArray(int[] array, int value)
+        private static int[] ArrayCreate(int arraySize)
         {
-            await Task.Factory.StartNew(() =>
+            int[] array = new int[arraySize];
+
+            for (int i = 0; i < arraySize; i++)
             {
-                for (int i = 0; i < array.Length; i++)
-                {
-                    array[i] *= value;
-                }
-            });
+                array[i] = _random.Next(0, 100);
+            }
 
             return array;
         }
 
-        private static async Task<int[]> SortArray(int[] array)
+        private static int[] ArrayMultiply(int[] array)
         {
-            await Task.Factory.StartNew(() => { Array.Sort(array); });
-            
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] *= _random.Next(1, 11);
+            }
+
             return array;
         }
 
-        private static async Task<int> GetAverage(int[] array)
+        private static int[] ArraySort(int[] array)
+        {
+            Array.Sort(array);
+
+            return array;
+        }
+
+        private static int GetAverage(int[] array)
         {
             int average = 0;
 
